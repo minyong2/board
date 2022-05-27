@@ -33,6 +33,9 @@ dependencies {
 	
 	//Spring security 다운로드
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	
+	//Session
+	implementation 'org.springframework.session:spring-session-core'
 }
 
 tasks.named('test') {

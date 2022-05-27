@@ -12,5 +12,8 @@ public class BoardVO {
 	private String content;
 	private String updateAt;
 	private String createAt;
+	private int studentsId;
+	private String studentsName;
+	private int cnt; //조회 수
 
 }
