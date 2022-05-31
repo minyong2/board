@@ -119,5 +119,16 @@
 		ON b.students_id = s.students_id
 		WHERE s.students_name LIKE CONCAT('%',#{studentsName},'%')
 	</select>
+	
+	<select id="selectBoardStatistics" resultType="map">
+	select
+	count(students_id) as studetnsCnt,
+	(select count(*)from board) as contentsCnt,
+	(select count(distinct (b.students_id)) from students as s
+	inner join board b
+	on s.students_id = b.students_id)as writerCnt,
+	( select sum(cnt) from board) as viewCnt
+	from students
+	</select>
 
 </mapper>

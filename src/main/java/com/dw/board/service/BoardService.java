@@ -60,6 +60,11 @@ public class BoardService {
 			
 			return boardMapper.selectSearchBoardList(studentsName);
 		}
+		
+		//-- 통계내기 ( 학생 수 , 게시글 수 , 작성자 수 , 총 조회수)
+		public Map<String, Object> selectBoardStatistics(){
+			return boardMapper.selectBoardStatistics();
+		}
 
 
 }

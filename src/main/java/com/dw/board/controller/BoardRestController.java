@@ -78,5 +78,12 @@ public class BoardRestController {
 		return boardService.getSearchBoardList(writer);
 	}
 	
+	//220531
+	@CrossOrigin
+	@GetMapping("/board/statistics")
+	public Map<String, Object> callBoardStatistics(){
+		return boardService.selectBoardStatistics();
+	}
+	
 
 }

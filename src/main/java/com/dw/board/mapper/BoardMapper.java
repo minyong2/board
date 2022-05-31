@@ -47,4 +47,6 @@ public interface BoardMapper {
 	
 	public List<Map<String, Object>> selectSearchBoardList(@Param("studentsName") String studentsName);
 	//파라미터 2개면 Param 하나면 생략가능
+	
+	public Map<String, Object> selectBoardStatistics();
 }
