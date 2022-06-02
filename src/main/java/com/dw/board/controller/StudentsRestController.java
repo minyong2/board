@@ -55,8 +55,8 @@ public class StudentsRestController {
 		
 		@GetMapping("/student/map")
 		public List<Map<String, Object>> callStudentsListByMap(HttpSession httpSession){
-			String name = (String)httpSession.getAttribute("name");
-			System.out.println("세션에서 가져온 이름은 ===>" + name);
+//			String name = (String)httpSession.getAttribute("name");
+//			System.out.println("세션에서 가져온 이름은 ===>" + name);
 			return studentsService.getStudentsListByMap();
 		}
 		

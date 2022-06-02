@@ -12,7 +12,8 @@
 		b.content,
 		b.cnt,
 		IFNULL(DATE_FORMAT(b.update_at,'%Y-%m-%d'),'-')AS updateAt,
-		DATE_FORMAT(b.create_at,'%Y-%m-%d') AS createAt
+		DATE_FORMAT(b.create_at,'%Y-%m-%d') AS createAt,
+		b.cnt
 	FROM board AS b
 	INNER JOIN students AS s
 	ON b.students_id = s.students_id
@@ -98,11 +99,11 @@
 	 </select>
 	 
 	 <update id="updateBoardViews">
-	 UPDATE board
-	 SET
-	 cnt = #{cnt}
-	 WHERE board_id = #{boardId}
-	 </update>
+		UPDATE board
+		SET 
+			cnt = #{cnt}
+		WHERE board_id = #{boardId}
+	</update>
 	 
 	 <select id="selectSearchBoardList" resultType="map">
 		SELECT
@@ -122,12 +123,12 @@
 	
 	<select id="selectBoardStatistics" resultType="map">
 	select
-	count(students_id) as studetnsCnt,
-	(select count(*)from board) as contentsCnt,
+	count(*) as studentsCnt,
+	(select count(*)from board) as boardCnt,
 	(select count(distinct (b.students_id)) from students as s
 	inner join board b
-	on s.students_id = b.students_id)as writerCnt,
-	( select sum(cnt) from board) as viewCnt
+	on s.students_id = b.students_id) as writerCnt,
+	(select sum(cnt) from board) as viewsCnt
 	from students
 	</select>
 

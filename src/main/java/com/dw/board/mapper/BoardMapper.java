@@ -15,6 +15,14 @@ public interface BoardMapper {
 	
 	public List<Map<String, Object>> selectBoardList();
 	
+	
+	/**
+	 * @param vo
+	 * @return
+	 * @author : Minyoung Kim
+	 * @date : 2022. 6. 2.
+	 * comment : 게시물 작성
+	 */
 	public int getSaveBoard(BoardVO vo);
 	
 

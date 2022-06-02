@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dw.board.mapper.BoardMapper;
 import com.dw.board.vo.BoardVO;
+import com.github.pagehelper.PageHelper;
 
 @Service
 public class BoardService {
@@ -16,11 +17,13 @@ public class BoardService {
 	@Autowired
 	private BoardMapper boardMapper;	
 	//게시물 전체 조회
-	public List<Map<String, Object>> selectBoardList(){
+	//pageNum : 현재 페이지, pageSize : 한 페이지에 게시물 개수
+	public List<Map<String, Object>> selectBoardList(int pageNum, int pageSize){
+		PageHelper.startPage(pageNum, pageSize);
 		
 		return boardMapper.selectBoardList();
 	}
-	
+	// 	게시물 작성
 	public int getSaveBoard(BoardVO vo) {
 		return boardMapper.getSaveBoard(vo);
 	}
