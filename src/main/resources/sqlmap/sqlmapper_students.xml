@@ -12,7 +12,8 @@
 	)
 	</insert>
 	
-	<select id="selectAllStudentsList" resultType="StudentsVO">
+	<!-- 총 학생 리스트 조회 -->
+	<select id="selectStudentsList" resultType="Map">
 	SELECT
 	students_id as studentsId,  
 	students_name as studentsName,
@@ -41,14 +42,18 @@
 	</select>
 	
 	<delete id="removeStudents">
-	DELETE FROM students
-	WHERE students_id = #{students_id}
+	DELETE FROM 
+		students
+	WHERE 
+		students_id = #{studentsId}
 	</delete>
 	
 	<update id="updateStudents">
 	UPDATE students
 	SET 
-		students_password = #{studentsPassword}
+		students_id = #{studentsId},
+		students_password = #{studentsPassword},
+		students_name = #{studentsName}
 	WHERE students_id = #{studentsId}
 	</update>
 	
@@ -62,6 +67,25 @@
 		WHERE students_name = #{studentsName}
 	</select>
 	
+	<select id="selectDetailStudents" resultType="StudentsVO">
+		SELECT
+			students_id AS studentsId,
+			students_name AS studentsName,
+			students_password AS studentsPassword,
+			create_at AS createAt
+		FROM students
+		WHERE students_id = #{studentsId}
+			
+	</select>
+	
+	<select id="selectSearchStudents" resultType="map">
+		SELECT
+			students_id AS studentsId,
+			students_name AS studentsName,
+			create_at AS createAt
+		FROM students
+		WHERE students_name LIKE CONCAT('%',#{studentsName},'%')
+	</select>
 	
 
 </mapper>

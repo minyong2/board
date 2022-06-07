@@ -7,10 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.dw.board.mapper.StudentsMapper;
 import com.dw.board.vo.StudentsVO;
+import com.github.pagehelper.PageHelper;
 
+/**
+ * @author dw-014
+ *
+ */
+/**
+ * @author dw-014
+ *
+ */
 @Service
 public class StudentsService {
 	
@@ -29,11 +39,13 @@ public class StudentsService {
 	}
 	
 	//학생 전체 조회
-	public List<StudentsVO> getAllStudentsList(){
-		return studentsMapper.selectAllStudentsList();
+	public List<Map<String, Object>> selectStudentsList(int pageNum, int pageSize){
+		PageHelper.startPage(pageNum, pageSize);
+		
+		return studentsMapper.selectStudentsList();
 	}
 	
-	public List<Map<String, Object>> getStudentsListByMap(){
+	public List<Map<String, Object>> getAllStudentsList(){
 		return studentsMapper.getStudentsListByMap();
 	}
 	
@@ -41,6 +53,7 @@ public class StudentsService {
 		return studentsMapper.selectStudents(studentsId);
 	}
 
+	//특정 학생 삭제
 	@Transactional(rollbackFor = Exception.class)
 	public int removeStudents(int studentsId) {
 		return studentsMapper.removeStudents(studentsId);
@@ -71,5 +84,13 @@ public class StudentsService {
 		}
 		
 		return true;
+	}
+	
+	public StudentsVO selectDetailStudents(int studentsId) {
+		return studentsMapper.selectDetailStudents(studentsId);
+	}
+//	학생 검색 조회
+	public List<Map<String, Object>> selectSearchStudents(String writer){
+		return studentsMapper.selectSearchStudents(writer);
 	}
 }
