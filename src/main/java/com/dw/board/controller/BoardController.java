@@ -37,5 +37,17 @@ public class BoardController {
 		
 		return "board";
 	}
+//	작성자 검색
+	@GetMapping("/board/search")
+	public String callBoardSearch(ModelMap map,
+			@RequestParam("writer") String writer,
+			@RequestParam("pageNum") int pageNum, 
+			@RequestParam("pageSize") int pageSize){
+		
+		List<Map<String, Object>> list = boardService.getSearchBoardList(writer, pageNum, pageSize);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String,Object>>(list);
+		map.addAttribute("pageHelper",pageInfo);
+		return "board";
+	}
 
 }

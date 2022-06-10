@@ -40,37 +40,25 @@
         </div>
         <div class="navigation">
             <ul>
-                <li>
-                    <a href="#">
-                        <span class="icon"><ion-icon name="logo-apple"></ion-icon></span>
-                        <span class="title">DW Board</span>                
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
-                        <span class="title">Dashboard</span>                
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                        <span class="title">Students</span>                
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                        <span class="title">logs</span>                
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><ion-icon name="log-out-outline"></ion-icon></span>
-                        <span class="title">Sign Out</span>                
-                    </a>
-                </li>
-            </ul>
+				<li><a href="/board?pageNum=1&pageSize=10"> <span class="icon"><ion-icon
+								name="logo-apple"></ion-icon></span> <span class="title">DW
+							Board</span>
+				</a></li>
+				<li><a href="/board?pageNum=1&pageSize=10"> <span class="icon"><ion-icon
+								name="home-outline"></ion-icon></span> <span class="title" onclick="goPage('Dashboard')">Dashboard</span>
+				</a></li>
+				<!-- Dashboard주소처럼 Log랑 students 주소 바꿔줘야함! -->
+				<li><a href="/students"> <span class="icon"><ion-icon
+								name="person-outline"></ion-icon></span> <span class="title" onclick="goPage('Students')">Students</span>
+				</a></li>
+				<li><a href="/logs"> <span class="icon"><ion-icon
+								name="lock-closed-outline"></ion-icon></span> <span class="title" onclick="goPage('logs')">logs</span>
+				</a></li>
+				<li><a href="#"> <span class="icon"><ion-icon
+								name="log-out-outline"></ion-icon></span> <span class="title">Sign
+							Out</span>
+				</a></li>
+			</ul>
         </div>
     </div>
     <!-- main -->
