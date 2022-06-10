@@ -5,56 +5,42 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.dw.board.vo.BoardVO;
 
-@Mapper
+
+@Mapper	
 public interface BoardMapper {
 
-	
-	public List<Map<String, Object>> selectBoardList();
-	
-	
 	/**
 	 * @param vo
 	 * @return
-	 * @author : Minyoung Kim
-	 * @date : 2022. 6. 2.
-	 * comment : 게시물 작성
+	 * @author : Sangwon Hyun
+	 * @date : 2022. 5. 19.
+	 * comment : 게시판 저장
 	 */
-	public int getSaveBoard(BoardVO vo);
+	public int insertBoard(BoardVO vo);
 	
-
+	
 	/**
-	 * @param boardId
 	 * @return
-	 * comment : 게시판 게시물 삭제
+	 * @author : Sangwon Hyun
+	 * @date : 2022. 5. 19.
+	 * comment : 전체 게시판 조회
 	 */
+	public List<Map<String, Object>> selectAllBoardList();
+	
+	public int updateBoard(BoardVO vo);
+	
 	public int deleteBoard(int boardId);
 	
-	/**
-	 * @param boardId
-	 * @return : int
-	 * @date : 2022. 5. 26.
-	 *comment : 게시물 수정
-	 */
-	public int updateBoard(@RequestBody BoardVO vo);
-	
-	
-	/**
-	 * @param boardId
-	 * @return
-	 * comment : 특정 회원 게시물 조회
-	 */
-	public BoardVO getBoard(int boardId);
-	
-	public BoardVO selectBoardOne(int BoardId);
+	public BoardVO selectBoardOne(int boardId);
 	
 	public int updateBoardViews(BoardVO vo);
 	
-	public List<Map<String, Object>> selectSearchBoardList(@Param("studentsName") String studentsName);
-	//파라미터 2개면 Param 하나면 생략가능
+	public List<Map<String, Object>> selectSearchBoardList(String studentsName);
+	
 	
 	public Map<String, Object> selectBoardStatistics();
+	
 }

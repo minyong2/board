@@ -87,7 +87,7 @@ public interface StudentsMapper {
 	 * @date : 2022. 6. 7.
 	 * comment : 학생 검색 조회
 	 */
-	public List<Map<String, Object>> selectSearchStudents(@Param("studentsName") String studentsName);
+	public List<Map<String, Object>> selectSearchStudents(String studentsName);
 	
 	
 }

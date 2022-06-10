@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.dw.board.mapper.StudentsMapper;
 import com.dw.board.vo.StudentsVO;
@@ -90,7 +89,8 @@ public class StudentsService {
 		return studentsMapper.selectDetailStudents(studentsId);
 	}
 //	학생 검색 조회
-	public List<Map<String, Object>> selectSearchStudents(String writer){
-		return studentsMapper.selectSearchStudents(writer);
+	public List<Map<String, Object>> selectSearchStudents(String studentsName,int pageNum, int pageSize){
+		PageHelper.startPage(pageNum, pageSize);
+		return studentsMapper.selectSearchStudents(studentsName);
 	}
 }

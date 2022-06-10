@@ -13,61 +13,63 @@ import com.github.pagehelper.PageHelper;
 
 @Service
 public class BoardService {
-	
+
 	@Autowired
-	private BoardMapper boardMapper;	
-	//게시물 전체 조회
-	//pageNum : 현재 페이지, pageSize : 한 페이지에 게시물 개수
-	public List<Map<String, Object>> selectBoardList(int pageNum, int pageSize){
+	private BoardMapper boardMapper;
+	
+	//게시판 저장
+	@Transactional(rollbackFor = Exception.class)
+	public int setBoard(BoardVO vo) {
+		return boardMapper.insertBoard(vo);
+	}
+	//게시판 전체 조회
+	//pageNum : 현재 페이지, pageSize: 한 페이지에 게시물 몇개 보여줄지
+	public List<Map<String, Object>> getAllBoardList(int pageNum, int pageSize){
 		PageHelper.startPage(pageNum, pageSize);
-		
-		return boardMapper.selectBoardList();
+		return boardMapper.selectAllBoardList();
 	}
-	// 	게시물 작성
-	public int getSaveBoard(BoardVO vo) {
-		return boardMapper.getSaveBoard(vo);
+	//게시물 수정
+	@Transactional(rollbackFor = Exception.class)
+	public int getUpdateBoard(BoardVO vo, int boardId) {
+		vo.setBoardId(boardId);
+		return boardMapper.updateBoard(vo);
 	}
-		//게시물 삭제
-		@Transactional(rollbackFor = {Exception.class})
-		public int getDeleteBoard(int boardId) {
-			return boardMapper.deleteBoard(boardId);
-		}
-		
-		// 게시물 수정
-		@Transactional(rollbackFor = {Exception.class})
-		public int getUpdateBoard(int boardId, BoardVO vo) {
-			vo.setBoardId(boardId); //VO에 Id를 셋팅 해줘서 mapper에 있는 vo 수정값이랑 Id가 전부 있게 하자.
-			return boardMapper.updateBoard(vo);
-		}
-		
-		//특정학생 게시물 상세 조회
-		@Transactional(rollbackFor = {Exception.class})
-		public BoardVO getBoard(int boardId) {
-			return boardMapper.getBoard(boardId);
-		}
-		
-		//게시물 조회수 증가
-		public int getUpdateBoardView(int boardId) {
-			//1. 게시판 번호를 이용해서 조회 수 컬럼을 select
-			BoardVO vo = boardMapper.selectBoardOne(boardId);
-			int views = vo.getCnt();
-			++views; //2. 조회 수를 1증가 함.
-			vo.setCnt(views);
-			vo.setBoardId(boardId);
-			return boardMapper.updateBoardViews(vo); //3.조회 수 update
-		}
-		
-		
-		//작성자 검색 조회
-		public List<Map<String, Object>> getSearchBoardList(String studentsName){
-			
-			return boardMapper.selectSearchBoardList(studentsName);
-		}
-		
-		//-- 통계내기 ( 학생 수 , 게시글 수 , 작성자 수 , 총 조회수)
-		public Map<String, Object> selectBoardStatistics(){
-			return boardMapper.selectBoardStatistics();
-		}
+	//게시물 삭제
+	@Transactional(rollbackFor = Exception.class)
+	public int getRemoveBoard(int boardId) {
+		return boardMapper.deleteBoard(boardId);
+	}
+	//게시물 상세조회
+	public BoardVO getBoard(int boardId) {
+		return boardMapper.selectBoardOne(boardId);
+	}
+	
+	//게시풀 조회수 증가
+	public int getUpdateBoardView(int boardId) {
+		//1. 게시판 번호를 이용해서 조회 수 컬럼을 select
+		BoardVO vo = boardMapper.selectBoardOne(boardId);
+		int views = vo.getCnt();
+		++views; //2. 조회 수를 1증가 함.
+		vo.setCnt(views);
+		vo.setBoardId(boardId);
+		return boardMapper.updateBoardViews(vo); //3.조회 수 update
+	}
+	
+	//작성자가 작성한 게시물 조회
+	public List<Map<String, Object>> getSearchBoardList(String studentsName,int pageNum, int pageSize){
+		PageHelper.startPage(pageNum, pageSize);
+		return boardMapper.selectSearchBoardList(studentsName);
+	}
+	
+	//학생 수, 게시글 수, 작성자 수, 총 조회 수 통계
+	public Map<String, Object> getBoardStatistics(){
+		return boardMapper.selectBoardStatistics();
+	}
+	
+	
 
-
+	
+	
+	
+	
 }

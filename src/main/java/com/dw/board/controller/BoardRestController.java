@@ -20,75 +20,76 @@ import com.dw.board.vo.BoardVO;
 import com.github.pagehelper.PageInfo;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1") 
 public class BoardRestController {
-	
+
 	@Autowired
 	private BoardService boardService;
 	
-	//게시판 조회
-	@CrossOrigin
-	@GetMapping("/board")
-	public PageInfo<Map<String,Object>> callBoardList(@RequestParam("pageNum")int pageNum,
-			@RequestParam("pageSize")int pageSize){
-		
-		List<Map<String,Object>> list = boardService.selectBoardList(pageNum, pageSize);
-		return new PageInfo<Map<String, Object>>(list);
-	}
-	
-
-	//게시판 작성
+	//게시판 저장 (C)
 	@CrossOrigin
 	@PostMapping("/board")
 	public int callSaveBoard(@RequestBody BoardVO vo) {
-		return boardService.getSaveBoard(vo);
+		return boardService.setBoard(vo);
 	}
 	
-	//----0526
-	// 게시물 삭제(D)
+	//게시판 전체조회 (R)
+	@CrossOrigin
+	@GetMapping("/board")
+	//리턴타입을 List<Map<String, Object>> => PageInfo<Map<String, Object>>
+	public PageInfo<Map<String, Object>> callBoardList(@RequestParam("pageNum") int pageNum, 
+			@RequestParam("pageSize") int pageSize){
+		
+		List<Map<String, Object>> list = boardService.getAllBoardList(pageNum, pageSize);
+		
+		return new PageInfo<Map<String, Object>>(list);
+	}
+	
+	//게시물 삭제 (D)	
 	@CrossOrigin
 	@DeleteMapping("/board/boardId/{id}")
 	public int callRemoveBoard(@PathVariable("id") int boardId) {
-		return boardService.getDeleteBoard(boardId);
+		return boardService.getRemoveBoard(boardId);
 	}
-
-	// 게시물 수정(U : UPDATE)
-		@CrossOrigin
-		@PatchMapping("/board/boardId/{id}")
-		public int callUpdateBoard(@PathVariable("id") int boardId, @RequestBody BoardVO vo) {
-			return boardService.getUpdateBoard(boardId,vo);
-		}
-
+	
+	//게시물 수정 (U)
+	@CrossOrigin
+	@PatchMapping("/board/boardId/{id}")
+	public int callUpdateBoard(@PathVariable("id") int boardId, @RequestBody BoardVO vo) {
+		return boardService.getUpdateBoard(vo, boardId);
+	}
+	
+	//게시물 상세보기 (R)
 	@CrossOrigin
 	@GetMapping("/board/boardId/{id}")
-	public BoardVO callBoard(@PathVariable("id") int boardId) { // 사용자의 요구사항이 매번 달라지니까 데이터 타입을 포괄적으로 (BoardVO로) 받아준다.
+	public BoardVO callBoard(@PathVariable("id") int boardId) {
 		return boardService.getBoard(boardId);
 	}
 	
-	
-//	 220527
-	// 게시물 카운트
+	//게시물 카운트
 	@CrossOrigin
 	@PatchMapping("/board/views/boardId/{id}")
 	public int callBoardViews(@PathVariable("id") int boardId) {
 		return boardService.getUpdateBoardView(boardId);
 	}
 	
-	
 	//쿼리 스트링으로 검색한 작성자 게시판 리스트 조회
-	// /board/search?witer=minoong
+	//리턴타입을 페이징 처리했던 컨트롤러 메소드와 동일하게
 	@CrossOrigin
 	@GetMapping("/board/search")
-	public List<Map<String, Object>> callBoardSearch(@RequestParam("writer")String writer){
-		return boardService.getSearchBoardList(writer);
+	public PageInfo<Map<String, Object>> callBoardSearch(@RequestParam("writer") String writer,
+			@RequestParam("pageNum") int pageNum, 
+			@RequestParam("pageSize") int pageSize){
+		
+		List<Map<String, Object>> list = boardService.getSearchBoardList(writer, pageNum, pageSize);
+		return new PageInfo<Map<String, Object>>(list);
 	}
 	
-	//220531
+	//게시판 통계 조회
 	@CrossOrigin
 	@GetMapping("/board/statistics")
 	public Map<String, Object> callBoardStatistics(){
-		return boardService.selectBoardStatistics();
+		return boardService.getBoardStatistics();
 	}
 	
-
 }
