@@ -64,7 +64,7 @@
 				<li><a href="/board?pageNum=1&pageSize=10"> <span class="icon"><ion-icon
 								name="home-outline"></ion-icon></span> <span class="title" onclick="goPage('Dashboard')">Dashboard</span>
 				</a></li>
-				<li><a href="/students"> <span class="icon"><ion-icon
+				<li><a href="/students?pageNum=1&pageSize=10"> <span class="icon"><ion-icon
 								name="person-outline"></ion-icon></span> <span class="title" onclick="goPage('Students')">Students</span>
 				</a></li>
 				<li><a href="/logs"> <span class="icon"><ion-icon

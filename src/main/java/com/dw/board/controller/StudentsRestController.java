@@ -22,88 +22,95 @@ import com.dw.board.vo.StudentsVO;
 import com.github.pagehelper.PageInfo;
 
 @RestController
-@RequestMapping("/api/v1")
+// 중복되는 url을 @RequestMapping으로 전역변수처럼 뺄 수 있음
+@RequestMapping("/api/v1") //api주소에 버젼1임
 public class StudentsRestController {
+
 	@Autowired
 	private StudentsService studentsService;
 	
-	//중요한 정보를 서버에 전송할 때 POST 사용
-	@CrossOrigin
-	@PostMapping("/login")
-	public boolean callIsLogin(@RequestBody StudentsVO vo, HttpSession httpSession) {
-		
-		
-		boolean isLogin = studentsService.isStudents(vo);
-		
-		if(isLogin) {
-			httpSession.setAttribute("name", "kimminyoung");
-		}
-		
-		return isLogin;
-	}
-	//학생 저장
-		//post는 body로 데이터를 받는다. (왜냐? 보안때문에)
+		// 중요한 정보를 서버에 전송할 때 post사용
 		@CrossOrigin
-		@PostMapping("/student")
+		@PostMapping("/login")
+		public boolean callIsLogin(@RequestBody StudentsVO vo, HttpSession httpSession) {
+			boolean isLogin = studentsService.isStuents(vo);
+			if(isLogin) {
+				// session에 저장하는 방식 key, value
+				httpSession.setAttribute("name", "jiyoo");
+			}
+			return isLogin;
+		}
+	
+	
+		// 학생 저장
+		// post는 body로 데이터를 받음
+		// @PostMapping("/api/v1/students") 
+		@CrossOrigin 
+		@PostMapping("/students")
 		public int callSaveStudents(@RequestBody StudentsVO vo) {
-			return studentsService.insertStudents(vo);
+			return studentsService.setStudents(vo);
 		}
-
-	//학생 전체 조회
+		
+		// 학생 조회
+//		@CrossOrigin
+//		@GetMapping("/students")
+//		public List<StudentsVO> callStudentsList(){
+//			return studentsService.getAllStudentsList();
+//		}
+		
 		@CrossOrigin
-		@GetMapping("/student")
+		@GetMapping("/students")
 		public PageInfo<Map<String,Object>> callStudentsList(@RequestParam("pageNum")int pageNum,
 				@RequestParam("pageSize")int pageSize){
 			
-			List<Map<String,Object>> list = studentsService.selectStudentsList(pageNum, pageSize);
-			return new PageInfo<Map<String, Object>>(list);
+			List<Map<String, Object>> list = studentsService.getAllStudentsList(pageNum,pageSize); 
+			return new PageInfo<Map<String,Object>>(list);
 		}
 		
-//		@GetMapping("/student/map")
-//		public List<Map<String, Object>> callStudentsListByMap(HttpSession httpSession){
-////			String name = (String)httpSession.getAttribute("name");
-////			System.out.println("세션에서 가져온 이름은 ===>" + name);
-//			return studentsService.getStudentsListByMap();
-//		}
 		
-	//특정 학생 조회(PK로 조회)
-		@GetMapping("/student/id/{id}")
-		public StudentsVO callStudent(@PathVariable("id") int studentsId) {
-			return studentsService.selectStudents(studentsId);
+		// map으로 학생 조회
+		@GetMapping("/students/map")
+		public List<Map<String, Object>> callStudentsListByMap(HttpSession httpSession){
+			
+			// 현재 login메소드에 session로직을 추가해서 login을 먼저 실행 안하면 name = null
+//			session데이터 가져오기 (추후 로직구현 예정)
+//			String name = (String)httpSession.getAttribute("name");
+//			System.out.println("session에서 가져온 이름은 ==> "+name);
+//			if(name == null) {
+//				return null;
+//			}
+			return studentsService.getAllStudentsMap();
 		}
 		
-	//특정 학생 삭제
+		// 특정 학생 조회(PK로 조회예정)
 		@CrossOrigin
-		@DeleteMapping("/student/id/{id}")
+		@GetMapping("/students/id/{id}")
+		public StudentsVO callStudents(@PathVariable("id") int studentsId) {
+			return studentsService.getStudents(studentsId);
+		}
+		
+		//특정 학생 삭제
+		@CrossOrigin
+		@DeleteMapping("/students/id/{id}")
 		public int callRemoveStudents(@PathVariable("id") int studentsId) {
-			return studentsService.removeStudents(studentsId);
+			return studentsService.deleteStudents(studentsId);
 		}
 		
-	// 특정 학생 수정
+		//특정 학생 수정
 		@CrossOrigin
-		@PatchMapping("/student/id/{id}")
-		public int callPatchStudents(@PathVariable("id") int studentsId,
+		@PatchMapping("/students/id/{id}")
+		public int callUpdateStudents(@PathVariable("id") int studentsID, 
 				@RequestBody StudentsVO vo) {
-			return studentsService.updateStudents(studentsId, vo);
-		}
-
-	//클릭한 학생 상세 조회
-		@CrossOrigin
-		@GetMapping("/student/detail/{studentsId}")
-		public StudentsVO selectDetailStudents(@PathVariable("studentsId") int studentsId) {
-			
-			return studentsService.selectDetailStudents(studentsId);
+			return studentsService.getUpdateStudents(vo, studentsID);
 		}
 		
-		//학생 검색하기
+		
 		@CrossOrigin
-		@GetMapping("/student/search")
-		public List<Map<String, Object>> selectSearchStudents(@RequestParam("studentsName") String studentsName,
-				@RequestParam("pageNum") int pageNum,
-				@RequestParam("pageSize") int pageSize){
-			
-			List<Map<String,Object>> list = studentsService.selectSearchStudents(studentsName,pageNum,pageSize);
-//			return new PageInfo<Map<String,Object>>(list);
-			return null;
+		@GetMapping("/students/search")
+		public PageInfo<Map<String,Object>> callStudentsList(@RequestParam("writer") String writer,
+				@RequestParam("pageNum")int pageNum,
+				@RequestParam("pageSize")int pageSize){
+			List<Map<String, Object>> list = studentsService.getStudentsSearchList(pageNum,pageSize,writer);
+			return new PageInfo<Map<String,Object>>(list);
 		}
 }

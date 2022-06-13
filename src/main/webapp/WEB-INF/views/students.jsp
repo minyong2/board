@@ -48,7 +48,7 @@
 								name="home-outline"></ion-icon></span> <span class="title" onclick="goPage('Dashboard')">Dashboard</span>
 				</a></li>
 				<!-- Dashboard주소처럼 Log랑 students 주소 바꿔줘야함! -->
-				<li><a href="/students"> <span class="icon"><ion-icon
+				<li><a href="/students?pageNum=1&pageSize=10"> <span class="icon"><ion-icon
 								name="person-outline"></ion-icon></span> <span class="title" onclick="goPage('Students')">Students</span>
 				</a></li>
 				<li><a href="/logs"> <span class="icon"><ion-icon
@@ -93,32 +93,37 @@
                         </tr>
                      </thead>
                      <tbody id="boardData">
-                         <tr>
-                             <td>hyunsangwon</td>
-                             <td>현상원</td>
-                             <td>2022-05-19</td>
-                         </tr>
-                         <tr>
-                            <td>hyunsangwon</td>
-                            <td>현상원</td>
-                            <td>2022-05-19</td>
-                        </tr>
-                        <tr>
-                            <td>hyunsangwon</td>
-                            <td>현상원</td>
-                            <td>2022-05-19</td>
-                        </tr>
+                         <c:choose>
+                         <c:when test="${fn:length(pageHelper.list)>0}">
+                         	<c:forEach items="${pageHelper.list}" var="item">
+                         		<tr onclick="getBoard(${item.studentsId})">
+                         			<td>${item.studentsId}</td>
+                         			<td>${item.studentsName}</td>
+                         			<td>${item.creatAt}</td>
+                         		</tr>
+                         	</c:forEach>
+                         </c:when>
+                         <c:otherwise>
+                         	<tr>
+                         		<td colspan=6 style="text-align:center;">게시글이 없습니다.</td>
+                         	</tr>
+                         </c:otherwise>
+                         </c:choose>
                      </tbody>
                  </table>
                  <div class="pagination">
-                    <a href="#">Previous</a>
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">Next</a>
+                 	<c:if test="${pageHelper.hasPreviousPage}">
+                 		<a onclick="getBoardList(${pageHelper.pageNum-1},10)">Previous</a>
+                 	</c:if>
+                 	<c:forEach begin="${pageHelper.navigateFirstPage}"
+						end="${pageHelper.navigateLastPage}" var="pageNum">
+						<a id="pageNum${pageNum}" onclick="getStudentsList(${pageNum},10)">${pageNum}</a>
+					</c:forEach>
+					<c:if test="${pageHelper.hasNextPage}">
+						<a onclick="getBoardList(${pageHelper.pageNum+1},10)">Next</a>
+					</c:if>
                  </div>
+                 <input id="nowPageNum" type="hidden" value="${pageHelper.pageNum}">
              </div>
          </div>
     </div>
@@ -138,7 +143,147 @@
     }
     list.forEach((item) => {item.addEventListener('mouseover',activeLink)});
 </script>
-<script>
+<!-- 통계함수 -->
+<script type="text/javascript">
 
+function goPage(pageName){
+	if(pageName == 'logs'){
+		location.href="/logs";
+	}
+	if(pageName == 'students'){
+		location.href="/students";
+	}
+	if(pageName == 'dashboard'){
+		location.href="/board?pageNum=1&pageSize=10";
+	}
+}
+</script>
+<script type="text/javascript">
+
+function goPage(pageName){
+	if(pageName == 'logs'){
+		location.href="/logs";
+	}
+	if(pageName == 'students'){
+		location.href="/students";
+	}
+	if(pageName == 'dashboard'){
+		location.href="/board?pageNum=1&pageSize=10";
+	}
+} 
+</script>
+	<!-- 팝업 -->
+<script>
+    $('.btn').click(function(){
+        $('.write-popup').css('display', 'block');
+    });
+    $('.btn-cancel').click(function(){
+        $('.write-popup').css('display', 'none');
+    });
+    $('.btn-close').click(function(){
+        $('.update-popup').css('display', 'none');
+        location.reload();
+    });
+    let list = document.querySelectorAll('.navigation li');
+    function activeLink(){
+        list.forEach((item) => {item.classList.remove('hovered')});
+        this.classList.add('hovered');
+    }
+    list.forEach((item) => {item.addEventListener('mouseover',activeLink)});
+</script>
+<script>
+/* 학생리스트 확인 함수 */
+function getStudentsList(pageNum,pageSize){
+	location.href="/students?pageNum="+pageNum+"&pageSize="+pageSize;    
+}
+
+/* <!-- 클릭한 게시물 확인 --> */
+function getBoard(studentsId){
+    $('.update-popup').css('display','block');
+    
+    $.ajax({
+        url : '/api/v1/students/id/'+studentsId,
+        type : 'GET',
+        dataType : 'json',
+        success : function(response){
+            $('#studentsId').val(response.studentsId)
+            $('#studentsName').val(response.studentsName)
+            $('#studentsPassword').val(response.studentsPassword)
+            $('#boardIdHidden').val(studentsId);
+        }
+        });
+}
+</script>
+<script type="text/javascript">
+// 수정함수
+$('#contentUpdate').click(function(){
+    var studentsIdHidden = $('#boardIdHidden').val();
+    var uptStudentsId = $('#studentsId').val();
+    var studentsName = $('#studentsName').val();
+    var studentsPassword = $('#studentsPassword').val();
+    var jsonData = {
+        studentsId : uptStudentsId,
+        studentsName : studentsName,
+        studentsPassword : studentsPassword
+    }
+    $.ajax({
+        url : '/api/v1/students/id/'+studentsIdHidden,
+        type : 'PATCH',
+        contentType : 'application/json', 
+        dataType : 'json',
+        data: JSON.stringify(jsonData),
+        success : function(response){
+            if(response > 0){
+                alert('수정 완료')
+                var pageNum = $('#nowPageNum').val();
+                getStudentsList(pageNum,10); 
+            }
+        }
+      });
+})
+
+// 삭제 함수
+$('#contentDelete').click(function(){
+        
+        // 게시판 번호 확인
+        var studentsIdHidden = $('#boardIdHidden').val();
+        if(confirm('정말 삭제 하시겠습니까?')){
+            $.ajax({
+            url : '/api/v1/students/id/'+studentsIdHidden,
+            type : 'DELETE',
+            dataType : 'json',
+            success : function(response){
+            	alert('삭제 완료')
+            	var pageNum = $('#nowPageNum').val();
+            	getStudentsList(pageNum,10);     
+            }
+          }); //ajax end
+        }
+    })
+</script>
+<!-- 페이징 -->
+<script type="text/javascript">
+getPageNum();
+// 페이지 번호 알아내는 함수
+function getPageNum(){
+	var pageNum = $('#nowPageNum').val();
+	$('#pageNum'+pageNum).css('backgroundColor','#287bff'); // id가 pageNum + pageNumber 문자를 합친거
+	$('#pageNum'+pageNum).css('color','#fff');
+}
+</script>
+<!-- 검색 함수 -->
+<script type="text/javascript">
+$('#searchBar').keyup(function(key){
+    //엔터를 누를때 hello world를 출력하고 싶음.
+    //13은 엔터를 의미
+    var pageNum = 1;
+    var pageSize = 10;
+    if(key.keyCode == 13){
+        var search = $('#searchBar').val().trim();
+        if(search !=''){
+        	location.href="/students/search?writer="+search+"&pageNum="+pageNum+"&pageSize"+pageSize;
+        }
+    }
+});
 </script>
 </html>
