@@ -90,7 +90,20 @@
                          </tr>
                      </thead>
                      <tbody id="boardData">
-                         <tr onclick="getPopup()">
+                     	<c:choose>
+                     		<c:when test="${fn:length(pageHelper.list)>0}">
+                     			<c:forEach items="${pageHelper.list}" var="item">
+                     				<tr onclick="getLog(${item.boardId})">
+                     					<td>${item.logId}</td>
+                     					<td>${item.ip}</td>
+                     					<td>${item.url}</td>
+                     					<td>${item.httpMethod}</td>
+                     					<td>${item.createAt}</td>
+                     				</tr>
+                     			</c:forEach>
+                     		</c:when>
+                     	</c:choose>
+                        <!--  <tr onclick="getPopup()">
                             <td>1</td>
                             <td>192.158.0.252</td>
                             <td>/board</td>
@@ -110,7 +123,7 @@
                             <td>/board</td>
                             <td>GET</td>
                             <td>2022-05-19 13:33:02</td>
-                        </tr>
+                        </tr> -->
                      </tbody>
                  </table>
                  <div class="pagination">
@@ -171,5 +184,48 @@
         $('.logs-popup').css('display', 'none');
      });
 
+</script>
+<script type="text/javascript">
+getLogsList(1, 10);
+function getLogsList(pageNum, pageSize){
+    $.ajax({
+        url: 'http://localhost:8080/api/v1/logs?pageNum='+pageNum+'&pageSize='+pageSize,
+        type : 'GET',
+        dataType: 'json',
+        success: function (response) {
+            //html append 작성
+            var html = '';
+            var len = response.list.length;
+            if(len > 0){
+                for(var i=0; i<len; i++){          
+                    html += '<tr onclick=getPopup('+response.list[i].log_id+')><td>'+response.list[i].log_id+'</td><td>'+response.list[i].ip+'</td><td>'+response.list[i].url+'</td><td>'+response.list[i].http_method+'</td><td>'+response.list[i].create_at+'</td></tr>';  
+                }//end for
+
+                //페이징 화면 구현
+                var paginationHtml = '';
+                if(response.hasPreviousPage){ //이전 페이지가 true 라면
+                    paginationHtml += '<a onclick="getLogsList('+(response.pageNum-1)+','+pageSize+')" href="#">Previous</a>';
+                }
+                for(var i=0; i<response.navigatepageNums.length; i++){ //페이지 번호 길이 만큼 for문 실행
+                    paginationHtml += '<a id="pageNum'+response.navigatepageNums[i]+'" onclick="getLogsList('+response.navigatepageNums[i]+','+pageSize+')">'+response.navigatepageNums[i]+'</a>';
+                }
+                if(response.hasNextPage){ //다음 페이지가 true 라면
+                    paginationHtml += '<a onclick="getLogsList('+(response.pageNum+1)+','+pageSize+')" href="#">Next</a>';
+                }
+                $('.pagination').children().remove();
+                $('.pagination').append(paginationHtml);
+
+                //페이지 번호에 맞게 css 수정
+                $('#pageNum'+pageNum).css('backgroundColor','#287bff');
+                $('#pageNum'+pageNum).css('color','#fff');
+
+            }else{
+                html += '<tr><td colspan=6 style="text-align: center;">게시글이 없습니다.</td></tr>';
+            }
+            $('#boardData').children().remove();
+            $('#boardData').append(html);//tbody에 json데이터 렌더링
+        }
+    });
+}
 </script>
 </html>

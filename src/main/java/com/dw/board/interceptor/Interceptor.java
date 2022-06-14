@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,12 @@ public class Interceptor implements HandlerInterceptor{
 		vo.setCreateAt(time);
 		logsService.setLogs(vo); // LogVO를 받고 있으니까 
 		
+		//세션 체크
+		HttpSession session = request.getSession();
+		
+		if(session.getAttribute("studentsId") == null) {
+			response.sendRedirect("/login");
+		}
 		return true;
 	}
 

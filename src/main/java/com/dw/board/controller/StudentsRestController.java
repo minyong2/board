@@ -23,7 +23,7 @@ import com.github.pagehelper.PageInfo;
 
 @RestController
 // 중복되는 url을 @RequestMapping으로 전역변수처럼 뺄 수 있음
-@RequestMapping("/api/v1") //api주소에 버젼1임
+@RequestMapping("/api/v1") //api주소에 버전1임
 public class StudentsRestController {
 
 	@Autowired
@@ -33,11 +33,7 @@ public class StudentsRestController {
 		@CrossOrigin
 		@PostMapping("/login")
 		public boolean callIsLogin(@RequestBody StudentsVO vo, HttpSession httpSession) {
-			boolean isLogin = studentsService.isStuents(vo);
-			if(isLogin) {
-				// session에 저장하는 방식 key, value
-				httpSession.setAttribute("name", "jiyoo");
-			}
+			boolean isLogin = studentsService.isStuents(vo,httpSession);
 			return isLogin;
 		}
 	

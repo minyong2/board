@@ -50,13 +50,13 @@
         }
 
         $.ajax({
-          url : 'http://localhost:8080/api/v1/login',
+          url : '/api/v1/login',
           type : 'POST',
           contentType : 'application/json',
           data : JSON.stringify(jsonData),
           success : function(response){
             if(response){
-              location.href = 'board/index.html'
+              location.href = '/board?pageNum=1&pageSize=10';
             }else{
               alert('아이디 혹은 비밀번호가 틀렸습니다.')
             }
