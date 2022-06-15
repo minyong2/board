@@ -22,7 +22,9 @@ public class WebConfig implements WebMvcConfigurer{
 				"/join",
 				"/login",
 				"/resources/static/css/*",
-				"/resources/static/js/*");
+				"/resources/static/js/*",
+				"/resources/static/images/*",
+				"/error");
 		// 이 url은 가로채지 말라는 뜻임 (요청을 해도 안 나옴) excludePathPatterns 안에 적은 url은 console에 찍어도 ip,url,Method가 안나옴
 	
 	}

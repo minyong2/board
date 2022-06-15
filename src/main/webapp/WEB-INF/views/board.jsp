@@ -59,7 +59,7 @@
                 <li>
                     <a href="#">
                         <span class="icon"><ion-icon name="logo-apple"></ion-icon></span>
-                        <span class="title">DW Board</span>                
+                        <span class="title">My Board</span>                
                     </a>
                 </li>
                 <li>

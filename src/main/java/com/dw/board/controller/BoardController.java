@@ -38,6 +38,7 @@ public class BoardController {
 		PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(list);
 		map.addAttribute("pageHelper",pageInfo);
 		
+		
 		int studentsId = (int)session.getAttribute("studentsId");
 		map.addAttribute("studentsId",studentsId);
 		
