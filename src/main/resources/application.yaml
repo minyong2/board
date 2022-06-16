@@ -3,12 +3,34 @@ application:
    version : v0.0.1
    title : KIMMINYOUNG
 
+##포트 수정
+server:
+   port: 8080
+
+#개발 버전 설정
+spring :
+   profiles:
+      active: env
+
+
 #MyBatis 설정
 mybatis:
    mapper-locations: classpath:/sqlmap/sqlmapper_*.xml
    type-aliases-package: com.dw.board.vo
+   
+#페이징 처리  
+pagehelper:
+   #사용할 데이터베이스
+   helper-dialect: mysql
+   #0페이지 요청이 들어오면 자동으로 1페이지로, 13페이지 까지 있는데 14페이지 요청이 들어오면 자동으로 13페이지로 변환
+   reasonable: true
+      
+   
+   
 #MySQL 접속정보 설정
+---
 spring:
+   profiles: dev
    datasource:
       initialization-mode : always
       schema: classpath:init.sql
@@ -24,11 +46,23 @@ spring:
          
       #css,js,image 폴더 위치 설정
       static-path-pattern : /resources/static/**
-      
-pagehelper:
-   #사용할 데이터베이스
-   helper-dialect: mysql
-   #0페이지 요청이 들어오면 자동으로 1페이지로, 13페이지 까지 있는데 14페이지 요청이 들어오면 자동으로 13페이지로 변환
-   reasonable: true
-      
-      
+
+
+---
+spring:
+   profiles: dev
+   datasource:
+      initialization-mode : always
+      schema: classpath:init.sql
+      driver-class-name : com.mysql.cj.jdbc.Driver # 이렇게 설정하면 스프링과 sql이 서로 접속할 수 있음
+      url: jdbc:mysql://localhost:3306/dw?useUnicode=true&charaterEncoding=utf-8&serverTimezone=UTC
+      username: root
+      password: bs07360012!
+   #JSP 경로 설정
+   mvc : 
+      view :
+         prefix : /WEB-INF/views/
+         suffix : .jsp
+         
+      #css,js,image 폴더 위치 설정
+      static-path-pattern : /resources/static/**

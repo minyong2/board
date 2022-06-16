@@ -18,7 +18,7 @@
             <div class="editor">
                 <div class="input-box">
                     <label for="studentsName">작성자 : </label>
-                    <input id="studentsName" type="text" value="현상원" readonly>
+                    <input id="studentsName" type="text" value="${studentsName}" readonly>
                 	<input id="studentsId" type="hidden" value="${studentsId}">
                 </div>
                 <div class="input-box">
