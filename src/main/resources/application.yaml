@@ -13,8 +13,8 @@ spring:
       initialization-mode : always
       schema: classpath:init.sql
       driver-class-name : com.mysql.cj.jdbc.Driver # 이렇게 설정하면 스프링과 sql이 서로 접속할 수 있음
-      url: jdbc:mysql://localhost:3306/dw?useUnicode=true&charaterEncoding=utf-8&serverTimezone=UTC
-      username: root
+      url: jdbc:mysql://minyoung-database.cphsvlh69mke.ap-northeast-2.rds.amazonaws.com:3306/dw?useUnicode=true&charaterEncoding=utf-8&serverTimezone=UTC
+      username: admin
       password: bs07360012!
    #JSP 경로 설정
    mvc : 
