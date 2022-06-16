@@ -63,6 +63,7 @@ public class Interceptor implements HandlerInterceptor{
 		
 		if(session.getAttribute("studentsId") == null) {
 			response.sendRedirect("/login");
+			return false;
 		}
 		return true;
 	}
