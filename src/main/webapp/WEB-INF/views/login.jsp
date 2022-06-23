@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/resources/static/css/login.css" />
-    <title>게시판 로그인</title>
+    <title>로그인</title>
   </head>
   <body>
     <div class="container">
@@ -56,7 +56,8 @@
           data : JSON.stringify(jsonData),
           success : function(response){
             if(response){
-              location.href = '/board?pageNum=1&pageSize=10';
+            	alert('로그인 되었습니다.')
+              /* location.href = ''; */
             }else{
               alert('아이디 혹은 비밀번호가 틀렸습니다.')
             }

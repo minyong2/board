@@ -30,7 +30,7 @@ pagehelper:
 #MySQL 접속정보 설정
 ---
 spring:
-   profiles: dev
+   profiles: env
    datasource:
       initialization-mode : always
       schema: classpath:init.sql

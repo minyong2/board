@@ -1,11 +1,11 @@
 package com.dw.board.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+//@RequestMapping("/health")
 public class LoginController {
 
 	@GetMapping("/login")
@@ -17,13 +17,13 @@ public class LoginController {
 	public String callJoinPage() {
 		return "join";
 	}
-	
-	@GetMapping("/logout")
-	public String callLoginout(HttpSession httpSession) {
-		// 세션 remove
-		httpSession.removeAttribute("studentsId");
-		httpSession.removeAttribute("studentsName");
-		return "login";
-	}
+//	
+//	@GetMapping("/logout")
+//	public String callLoginout(HttpSession httpSession) {
+//		// 세션 remove
+//		httpSession.removeAttribute("studentsId");
+//		httpSession.removeAttribute("studentsName");
+//		return "login";
+//	}
 	
 }
